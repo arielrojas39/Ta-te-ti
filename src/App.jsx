@@ -4,42 +4,41 @@
 import { useState } from 'react'
 import './App.css'
 
-function App() {
-  
-  const TURNS = {
-    X: 'x',
-    O: 'o'
-  }
+const TURNS = {
+  X: 'x',
+  O: 'o'
+}
 
-  let [board, setBoard] = useState(Array(9).fill(null))
-  const [turn, setTurns] = useState(TURNS.X)
+const Square = ({children, isSelected, updateBoard, index}) =>{
+  {/* Si la variable isSelected es true le agregamos el string 'isSelected', de lo contrario no agregamos nada*/}
+  const className = `square ${isSelected ? 'isSelected' : ''}` 
 
-  const handleClick = (index)=>{
+  const handleClick = ()=>{
     {/*2* cuando la funcion handleClikc se ejecuta, pasa a ejecutar la funcion updateBoard()*/}
     updateBoard(index)
   }
+
+  return (
+    <div onClick={handleClick} className={className}>
+      {/*1* cuando se hace un click sobre el elemento square se pasa como promps la funcion handleClick */}
+      {children}
+    </div>
+  )
+}
+
+function App() {
+  
+  const [board, setBoard] = useState(Array(9).fill(null))
+  const [turn, setTurns] = useState(TURNS.X)
 
   const updateBoard = (index) =>{
     let newBoard = [...board]
     newBoard[index] = turn
     setBoard(newBoard)
-    console.log(turn)
     console.log(newBoard[index])
-    console.log(newBoard)
     {/*3* esta funcion evalua el turno jugado y otorga el turno al otro jugador*/}
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
     setTurns(newTurn)
-  }
-
-  const Square = ({children, isSelected, updateBoard, index}) =>{
-    {/* Si la variable isSelected es true le agregamos el string 'isSelected', de lo contrario no agregamos nada*/}
-    const className = `square ${isSelected ? 'isSelected' : ''}` 
-    return (
-      <div onClick={handleClick} className={className}>
-        {/*1* cuando se hace un click sobre el elemento square se pasa como promps la funcion handleClick */}
-        {children}
-      </div>
-    )
   }
 
   return (
@@ -53,7 +52,7 @@ function App() {
               index={index}
               updateBoard={updateBoard}
             >
-              {square}
+              {board[index]}
             </Square>
           )
         })}
